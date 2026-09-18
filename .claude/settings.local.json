@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"C:\\\\Users\\\\PC\\\\AppData\\\\Roaming\\\\npm\\\\node_modules\\\\@anthropic-ai\\\\claude-code\\\\bin\\\\claude.exe\" plugin marketplace list)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(& \"C:\\\\Users\\\\PC\\\\AppData\\\\Roaming\\\\npm\\\\node_modules\\\\@anthropic-ai\\\\claude-code\\\\bin\\\\claude.exe\" plugin --help)"
+    ]
+  }
+}
