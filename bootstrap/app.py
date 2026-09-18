@@ -46,18 +46,23 @@ def validate(auth_header: str) -> dict:
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(401, "Missing bearer token")
     token = auth_header.removeprefix("Bearer ").strip()
-    if DEV_JWKS_PATH:
-        import json
-        with open(DEV_JWKS_PATH) as f:
-            key = jwt.PyJWK(json.load(f)["keys"][0]).key
-    else:
-        key = _jwks.get_signing_key_from_jwt(token).key
     try:
+        # Resolving the signing key decodes the token header, and on a cache
+        # miss fetches Microsoft's JWKS — either can raise on a malformed token
+        # or an unknown `kid`, so this belongs inside the guard too. Catching
+        # PyJWTError (not just InvalidTokenError) also covers PyJWKClientError,
+        # which is a sibling class and would otherwise escape as a 500.
+        if DEV_JWKS_PATH:
+            import json
+            with open(DEV_JWKS_PATH) as f:
+                key = jwt.PyJWK(json.load(f)["keys"][0]).key
+        else:
+            key = _jwks.get_signing_key_from_jwt(token).key
         # audience= and issuer= verify `aud` and `iss`; PyJWT also checks `exp`.
         return jwt.decode(
             token, key, algorithms=["RS256"], audience=AUDIENCE, issuer=ISSUER
         )
-    except jwt.InvalidTokenError as e:
+    except jwt.PyJWTError as e:
         raise HTTPException(401, f"Invalid token: {e}")
 
 

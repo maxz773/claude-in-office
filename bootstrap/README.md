@@ -1,30 +1,45 @@
-# Bootstrap endpoint — FastAPI + Postgres
+# Bootstrap endpoint — FastAPI + SQLite
 
 A minimal FastAPI implementation of the Claude in Office `/bootstrap`
 endpoint. It validates the caller's Entra ID token and returns per-user
-config (skills, MCP servers, gateway overrides, …) read from Postgres.
+config (skills, MCP servers, gateway overrides, …) read from the database.
 
 - `app.py` — the HTTP layer: JWT validation, CORS, the `/bootstrap` route.
 - `config.py` — environment-driven settings. Edit this.
-- `store.py` — the Postgres lookup keyed by Entra `oid`.
-- `schema.sql` — the default table.
+- `store.py` — the SQLite lookup keyed by Entra `oid`.
+- `schema.sqlite.sql` — the table, applied automatically on startup.
+- `schema.sql` — the Postgres equivalent, for when you move off SQLite.
 
 ## Setup
 
 ```bash
 pip install -r requirements.txt
 export TENANT_ID=<your-tenant-guid>
-export DATABASE_URL=postgresql://user:pass@host:5432/bootstrap
-
-# create the table
-psql "$DATABASE_URL" -f schema.sql
 ```
+
+That is the whole setup — the SQLite file (`bootstrap.db`) and its table are
+created on first start. `DATABASE_URL` defaults to that file and only needs
+setting if you want it somewhere else.
 
 Find your tenant id (or use `az account show --query tenantId`):
 
 ```python
 # get_tenant_id.py in the reference example does the same via OIDC discovery.
 ```
+
+### Moving back to Postgres
+
+SQLite is the local/debug backend. For a real deployment, restore the
+Postgres store and point `DATABASE_URL` at your server:
+
+```bash
+git show fa00ec7:bootstrap/store.py > bootstrap/store.py
+# swap aiosqlite back for asyncpg in requirements.txt
+export DATABASE_URL=postgresql://user:pass@host:5432/bootstrap
+psql "$DATABASE_URL" -f schema.sql
+```
+
+Only `lookup_config` differs between the two backends — `app.py` is unchanged.
 
 ## Run
 

@@ -6,7 +6,7 @@
   xsi:type="TaskPaneApp">
   
   <Id>4e2fd29d-dad0-40b3-af3c-a16e347a5ddc</Id>
-  <Version>1.0.0.12</Version>
+  <Version>1.0.0.13</Version>
   <ProviderName>Anthropic</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Claude" />
@@ -32,7 +32,7 @@
   </Requirements>
 
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://pivot.claude.ai/?m=unified-1.0.0.12&amp;gateway_url=https%3A%2F%2Flitellm.acme.com&amp;gateway_auth_header=x-api-key&amp;gateway_api_format=anthropic&amp;auto_connect=0" />
+    <SourceLocation DefaultValue="https://pivot.claude.ai/?m=unified-1.0.0.12&amp;gateway_url=https%3A%2F%2Flitellm.acme.com&amp;gateway_auth_header=x-api-key&amp;gateway_api_format=anthropic&amp;auto_connect=0&amp;bootstrap_url=http%3A%2F%2F127.0.0.1%3A8080%2Fbootstrap&amp;entra_sso=1" />
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -178,7 +178,7 @@
         <bt:Image id="Icon.80x80" DefaultValue="https://pivot.claude.ai/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://pivot.claude.ai/?m=unified-1.0.0.12&amp;gateway_url=https%3A%2F%2Flitellm.acme.com&amp;gateway_auth_header=x-api-key&amp;gateway_api_format=anthropic&amp;auto_connect=0"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://pivot.claude.ai/?m=unified-1.0.0.12&amp;gateway_url=https%3A%2F%2Flitellm.acme.com&amp;gateway_auth_header=x-api-key&amp;gateway_api_format=anthropic&amp;auto_connect=0&amp;bootstrap_url=http%3A%2F%2F127.0.0.1%3A8080%2Fbootstrap&amp;entra_sso=1"/>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://pivot.claude.ai"/>
       </bt:Urls>
       <bt:ShortStrings>

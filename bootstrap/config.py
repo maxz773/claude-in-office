@@ -2,6 +2,7 @@
 Edit this file to configure your bootstrap server. app.py should not need changes.
 """
 import os
+from pathlib import Path
 
 # ─── Entra / JWT ──────────────────────────────────────────────────────
 TENANT_ID = os.environ["TENANT_ID"]                         # your Entra tenant
@@ -17,9 +18,14 @@ JWKS_URL = f"https://login.microsoftonline.com/{TENANT_ID}/discovery/v2.0/keys"
 HOST = os.getenv("HOST", "127.0.0.1")
 PORT = int(os.getenv("PORT", "8080"))
 
-# ─── Postgres ─────────────────────────────────────────────────────────
-# postgresql://user:password@host:port/database
-DATABASE_URL = os.environ["DATABASE_URL"]
+# ─── Database ─────────────────────────────────────────────────────────
+# Local debug runs on SQLite — the file is created on first start, so there
+# is nothing to provision. Path resolves next to this file, not the cwd, so
+# you get the same database wherever you launch from.
+# To go back to Postgres, point this at postgresql://… and restore store.py
+# from git (see the note at the top of store.py).
+_DEFAULT_DB = Path(__file__).with_name("bootstrap.db")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{_DEFAULT_DB.as_posix()}")
 
 # ─── Response tuning ──────────────────────────────────────────────────
 # Seconds before the add-in re-fetches. 0 (default) omits
